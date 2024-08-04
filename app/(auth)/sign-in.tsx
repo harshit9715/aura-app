@@ -5,9 +5,11 @@ import { images } from "@/constants";
 import FormField from "@/components/FormField";
 import CustomButton from "@/components/CustomButton";
 import { Link, router } from "expo-router";
-import { signIn } from "@/lib/appwrite";
+import { getCurrentUser, signIn } from "@/lib/appwrite";
+import { useGlobalContext } from "@/context/GlobalProvider";
 
 const SignIn = () => {
+  const { setUser, setIsLoggedIn } = useGlobalContext();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [form, setForm] = useState({
     email: "",
@@ -15,16 +17,16 @@ const SignIn = () => {
   });
 
   const handleSubmit = async () => {
-    console.log(form);
     try {
       if (!form.email || !form.password) {
         Alert.alert("Please fill all fields");
         return;
       }
       setIsSubmitting(true);
-      const user = await signIn(form);
-      console.log(user);
-      // todo: set user in context
+      await signIn(form);
+      const currentUser = await getCurrentUser();
+      setUser(currentUser);
+      setIsLoggedIn(true);
       router.replace("/home");
     } catch (error) {
       console.log(error);
@@ -35,6 +37,7 @@ const SignIn = () => {
   };
   return (
     <SafeAreaView className="h-full bg-primary">
+      {/* todo: replace with keyboard avoiding view */}
       <ScrollView>
         <View className="my-6 min-h-[83vh] w-full justify-center px-4">
           <Image
