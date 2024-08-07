@@ -12,7 +12,7 @@ type TabIconProps = {
 
 const TabIcon = ({ color, focused, icon, name }: TabIconProps) => {
   return (
-    <View className="items-center justify-center gap-2">
+    <View className="items-center justify-center px-4 py-2">
       <Image
         source={icon}
         resizeMode="contain"
@@ -21,7 +21,7 @@ const TabIcon = ({ color, focused, icon, name }: TabIconProps) => {
         alt={name}
       />
       <Text
-        className={`${focused ? "font-psemibold" : "font-pregular"} text-xs`}
+        className={`mt-1 w-full ${focused ? "font-psemibold" : "font-pregular"} text-xs`}
         style={{ color }}
       >
         {name}
